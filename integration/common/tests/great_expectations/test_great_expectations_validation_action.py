@@ -2,6 +2,7 @@ import json
 import os
 import sqlite3
 import tempfile
+from unittest.mock import patch
 
 import pandas
 import pytest
@@ -16,6 +17,8 @@ from sqlalchemy import create_engine
 
 from openlineage.common.provider.great_expectations import OpenLineageValidationAction
 from openlineage.common.provider.great_expectations.results import GreatExpectationsAssertion
+
+current_env = os.environ
 
 project_config = DataContextConfig(
     datasources={
@@ -84,6 +87,7 @@ def test_db_file():
     os.remove(file)
 
 
+@patch.dict(os.environ, {"OPENLINEAGE_URL": "http://localhost:5000", **current_env})
 def test_dataset_from_sql_source(test_db_file, tmpdir):
     connection_url = f'sqlite:///{test_db_file}'
     engine = create_engine(connection_url)
@@ -134,6 +138,7 @@ def test_dataset_from_sql_source(test_db_file, tmpdir):
                                                     'size')])
 
 
+@patch.dict(os.environ, {"OPENLINEAGE_URL": "http://localhost:5000", **current_env})
 def test_dataset_from_custom_sql(test_db_file, tmpdir):
     connection_url = f'sqlite:///{test_db_file}'
     engine = create_engine(connection_url)
@@ -199,6 +204,7 @@ def test_dataset_from_custom_sql(test_db_file, tmpdir):
                ['dataQuality', 'greatExpectations_assertions', 'dataQualityMetrics'])
 
 
+@patch.dict(os.environ, {"OPENLINEAGE_URL": "http://localhost:5000", **current_env})
 def test_dataset_from_pandas_source(tmpdir):
     data_file = tmpdir + '/data.json'
     json_data = [
@@ -255,3 +261,9 @@ def test_dataset_from_pandas_source(tmpdir):
                for a in [GreatExpectationsAssertion('expect_table_row_count_to_equal', True),
                          GreatExpectationsAssertion('expect_column_sum_to_be_between', True,
                                                     'size')])
+
+
+def test_openlineage_validation_action_fails_without_env_vars(tmpdir):
+    # Unfortunately, this always initializes `OpenLineageValidationAction`
+    with pytest.raises(RuntimeError):
+        BaseDataContext(project_config=project_config)
