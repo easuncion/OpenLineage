@@ -5,6 +5,7 @@
 ### Added
 * Extract source code of PythonOperator and BashOperator similar to SQL facet [@mobuchowski](https://github.com/mobuchowski)
 * OpenLineage sensor for OpenLineage-Dagster integration [@dalinkim](https://github.com/dalinkim)
+* Added `UnknownOperatorAttributeRunFacet` to Airflow integration to record operators that don't produce lineage [@collado-mike](https://github.com/collado-mike)
 
 ## [0.5.2](https://github.com/OpenLineage/OpenLineage/compare/0.5.1...0.5.2)
 ### Added
