@@ -215,6 +215,7 @@ def import_from_string(path: str):
         module = importlib.import_module(module_path)
         return getattr(module, target)
     except Exception as e:
+        logging.exception(e)
         raise ImportError(f"Failed to import {path}") from e
 
 
