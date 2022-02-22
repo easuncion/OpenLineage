@@ -28,6 +28,7 @@ public class FlinkStatefulApplication {
                 .process(new StatefulCounter()).name("process").uid("process")
                 .sinkTo(aKafkaSink(parameters.getRequired("output-topic"))).name("kafka-sink").uid("kafka-sink");
 
+        env.registerJobListener(new OpenLineageFlinkJobListener(env));
         env.execute("flink-examples-stateful");
     }
 }

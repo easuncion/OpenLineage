@@ -44,9 +44,9 @@ dependencies {
     testImplementation 'org.awaitility:awaitility:4.1.1'
 
     def flinkVersion = '1.14.2'
-    shadow "org.apache.flink:flink-java:$flinkVersion"
-    shadow "org.apache.flink:flink-streaming-java_2.12:$flinkVersion"
-    shadow "org.apache.flink:flink-runtime-web_2.12:$flinkVersion"
+    implementation "org.apache.flink:flink-java:$flinkVersion"
+    implementation "org.apache.flink:flink-streaming-java_2.12:$flinkVersion"
+    implementation "org.apache.flink:flink-runtime-web_2.12:$flinkVersion"
 
     implementation "com.typesafe:config:1.4.1"
     implementation "org.apache.avro:avro:1.11.0"
